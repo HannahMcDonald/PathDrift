@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "CoordinatesProcessor.Protos";
+
+package coordinates;
+
+// The post service definition
+service CoordinatesApi {
+	rpc GetCoordinates (CoordinatesRequest) returns (CoordinatesReply);
+}
+
+message Coordinates {
+	string id = 1;
+	int32 index = 2;
+	float xCoordinate = 3;
+	float yCoordinate = 4;
+	float zCoordinate = 5;
+	float RxCoordinate = 6;
+	float RyCoordinate = 7;
+	float RzCoordinate = 8;
+	float UxCoordinate = 9;
+	float UyCoordinate = 10;
+	float UzCoordinate = 11;
+	float UTranslation = 12;
+	float URxCoordinate = 13;
+	float URyCoordinate = 14;
+	float URzCoordinate = 15;
+}
+
+// The request message containing the co-ordinates
+message CoordinatesRequest {
+	repeated Coordinates CoordinatesList = 1;
+}
+
+message CoordinatesReply {
+	string message = 1;
+}

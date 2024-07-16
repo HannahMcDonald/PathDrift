@@ -1,0 +1,46 @@
+﻿@page "/3dVisualData"
+@using CoordinatesProcessor.Services
+@using CoordinatesProcessor.Protos;
+@using Plotly.Blazor
+@using Plotly.Blazor.Traces
+@using Plotly.Blazor.Traces.Scatter3DLib
+@rendermode InteractiveServer
+@inject ICoordinatesRepository _coordinatesRepository;
+<PageTitle>Visual Data</PageTitle>
+
+<h1>3D Visual Data</h1>
+
+ @if (coordinatesList is null || coordinatesList.Count() == 0)
+{
+    <h2> No results to show </h2>
+}
+else
+{
+    <PlotlyChart style="height: 60vh; min-height: 350px" @bind-Config="config" @bind-Layout="layout" @bind-Data="data" @ref="chart" />
+}
+
+@code {
+    private IEnumerable<Coordinates> coordinatesList = Enumerable.Empty<Coordinates>();
+    private PlotlyChart chart;
+    private Config config;
+    private Layout layout;
+    private IList<ITrace> data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        coordinatesList = await Task.FromResult(_coordinatesRepository.GetCoordinates());
+
+        data = new List<ITrace>()
+        {
+            
+            new Scatter3D
+            {
+                Name = "ScatterTrace",
+                Mode = ModeFlag.Lines | ModeFlag.Markers,
+                X = coordinatesList.Select(c => (object)c.XCoordinate).ToList(),
+                Y = coordinatesList.Select(c => (object)c.YCoordinate).ToList(),
+                Z = coordinatesList.Select(c => (object)c.ZCoordinate).ToList()
+            },
+        };
+    }
+}

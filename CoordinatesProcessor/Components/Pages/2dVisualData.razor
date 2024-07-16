@@ -1,0 +1,44 @@
+﻿@page "/2dVisualData"
+@using CoordinatesProcessor.Services
+@using CoordinatesProcessor.Protos;
+@using Plotly.Blazor
+@using Plotly.Blazor.Traces
+@rendermode InteractiveServer
+@inject ICoordinatesRepository _coordinatesRepository;
+<PageTitle>Visual Data</PageTitle>
+
+<h1>2D Visual Data</h1>
+
+ @if (coordinatesList is null || coordinatesList.Count() == 0)
+{
+    <h2> No results to show </h2>
+}
+else
+{
+    <PlotlyChart style="height: 60vh; min-height: 350px" @bind-Config="config" @bind-Layout="layout" @bind-Data="data" @ref="chart" />
+}
+
+@code {
+    private IEnumerable<Coordinates> coordinatesList = Enumerable.Empty<Coordinates>();
+    private PlotlyChart chart;
+    private Config config;
+    private Layout layout;
+    private IList<ITrace> data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        coordinatesList = await Task.FromResult(_coordinatesRepository.GetCoordinates());
+
+        data = new List<ITrace>()
+        {
+
+            new Scatter
+            {
+                Name = "ScatterTrace",
+                Mode = Plotly.Blazor.Traces.ScatterLib.ModeFlag.Lines | Plotly.Blazor.Traces.ScatterLib.ModeFlag.Markers,
+                X = coordinatesList.Select(c => (object)c.XCoordinate).ToList(),
+                Y = coordinatesList.Select(c => (object)c.YCoordinate).ToList(),
+            },
+        };
+    }
+}

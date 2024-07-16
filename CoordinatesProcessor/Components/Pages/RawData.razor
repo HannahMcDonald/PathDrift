@@ -1,0 +1,72 @@
+﻿@page "/rawData"
+@using CoordinatesProcessor.Services
+@using  CoordinatesProcessor.Protos;
+
+@rendermode InteractiveServer
+@inject ICoordinatesRepository _coordinatesRepository;
+
+<PageTitle>Raw Data</PageTitle>
+
+<h1>Raw Data</h1>
+@if (coordinatesList is null || coordinatesList.Count() == 0)
+{
+    <h2> No results to show </h2>
+} 
+else 
+{
+<table class="table">
+    <thead>
+        <tr>
+            @foreach (var header in GetHeaders())
+            {
+                <th>@header</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var coordinates in coordinatesList)
+        {
+            <tr>
+                <td>@coordinates.Id</td>
+                <td>@coordinates.Index</td>
+                <td>@coordinates.XCoordinate</td>
+                <td>@coordinates.YCoordinate</td>
+                <td>@coordinates.ZCoordinate</td>
+                <td>@coordinates.RxCoordinate</td>
+                <td>@coordinates.RyCoordinate</td>
+                <td>@coordinates.RzCoordinate</td>
+                <td>@coordinates.UxCoordinate</td>
+                <td>@coordinates.UyCoordinate</td>
+                <td>@coordinates.UzCoordinate</td>
+                <td>@coordinates.UTranslation</td>
+                <td>@coordinates.URxCoordinate</td>
+                <td>@coordinates.URyCoordinate</td>
+                <td>@coordinates.URzCoordinate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+    private IEnumerable<Coordinates> coordinatesList = Enumerable.Empty<Coordinates>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        coordinatesList = await Task.FromResult(_coordinatesRepository.GetCoordinates());
+    }
+
+    private List<string> GetHeaders()
+    {
+        var props = coordinatesList
+        .First()
+        .GetType()
+        .GetProperties()
+        .Select(prop => prop.Name.Replace("Coordinate", ""))
+        .Except(new string[] {"Parser", "Descriptor"})
+        .ToList();
+
+        return props;
+
+    }
+}
