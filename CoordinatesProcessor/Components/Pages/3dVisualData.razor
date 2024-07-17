@@ -29,18 +29,19 @@ else
     protected override async Task OnInitializedAsync()
     {
         coordinatesList = await Task.FromResult(_coordinatesRepository.GetCoordinates());
-
-        data = new List<ITrace>()
+        if (coordinatesList is not null)
         {
-            
-            new Scatter3D
+            data = new List<ITrace>()
             {
-                Name = "ScatterTrace",
-                Mode = ModeFlag.Lines | ModeFlag.Markers,
-                X = coordinatesList.Select(c => (object)c.XCoordinate).ToList(),
-                Y = coordinatesList.Select(c => (object)c.YCoordinate).ToList(),
-                Z = coordinatesList.Select(c => (object)c.ZCoordinate).ToList()
-            },
+                new Scatter3D
+                {
+                    Name = "ScatterTrace",
+                    Mode = ModeFlag.Lines | ModeFlag.Markers,
+                    X = coordinatesList.Select(c => (object)c.XCoordinate).ToList(),
+                    Y = coordinatesList.Select(c => (object)c.YCoordinate).ToList(),
+                    Z = coordinatesList.Select(c => (object)c.ZCoordinate).ToList()
+                },
+            };
         };
     }
 }

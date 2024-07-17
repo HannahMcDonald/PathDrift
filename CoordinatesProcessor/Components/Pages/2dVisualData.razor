@@ -29,16 +29,19 @@ else
     {
         coordinatesList = await Task.FromResult(_coordinatesRepository.GetCoordinates());
 
-        data = new List<ITrace>()
+        if (coordinatesList is not null)
         {
-
-            new Scatter
+            data = new List<ITrace>()
             {
-                Name = "ScatterTrace",
-                Mode = Plotly.Blazor.Traces.ScatterLib.ModeFlag.Lines | Plotly.Blazor.Traces.ScatterLib.ModeFlag.Markers,
-                X = coordinatesList.Select(c => (object)c.XCoordinate).ToList(),
-                Y = coordinatesList.Select(c => (object)c.YCoordinate).ToList(),
-            },
-        };
+
+                new Scatter
+                {
+                    Name = "ScatterTrace",
+                    Mode = Plotly.Blazor.Traces.ScatterLib.ModeFlag.Lines | Plotly.Blazor.Traces.ScatterLib.ModeFlag.Markers,
+                    X = coordinatesList.Select(c => (object)c.XCoordinate).ToList(),
+                    Y = coordinatesList.Select(c => (object)c.YCoordinate).ToList(),
+                },
+            };
+        }
     }
 }

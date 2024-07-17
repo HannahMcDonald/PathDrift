@@ -3,7 +3,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace CoordinatesClient
 {
-    public class CsvReader
+    public class CsvReader : ICsvReader
     {
         public CsvReader() { }
         public List<Coordinates> ReadData(string filePath)
