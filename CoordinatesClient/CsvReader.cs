@@ -1,13 +1,21 @@
 ﻿using CoordinatesClient.Protos;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic.FileIO;
 
 namespace CoordinatesClient
 {
     public class CsvReader : ICsvReader
     {
-        public CsvReader() { }
+        private readonly ILogger<CsvReader> _logger;
+
+        public CsvReader(ILogger<CsvReader> logger) 
+        { 
+            _logger = logger;
+        }
         public List<Coordinates> ReadData(string filePath)
         {
+            _logger.LogInformation("Reading csv data from {filepath}", filePath);
+
             if (string.IsNullOrEmpty(filePath))
             {
                 throw new ArgumentException("ReadData - No filepath for data specified");
