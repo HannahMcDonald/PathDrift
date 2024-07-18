@@ -12,6 +12,10 @@ CoordinatesClient is a console application that when run will
 The CoordinatesProcessor is a Blazor web app that will 
 1. Receive a list of coordinates from the CoordinatesClient
 2. Render the cooardinates in raw, 2D and 3D formats
+The app is hosted on https://localhost:7126/ 
 
 Running the app locally
 The project startup is configured to run both applications. 
+
+Alternatively, you can do run
+dotnet run for each project 
